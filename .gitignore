@@ -1,0 +1,38 @@
+# Env
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+dist/
+.mypy_cache/
+.pytest_cache/
+
+# Node
+node_modules/
+.next/
+frontend/.next/
+
+# Docker volumes
+postgres_data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Playwright
+.playwright-mcp/
+playwright-report/
+test-results/
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Claude
+.claude/
+
