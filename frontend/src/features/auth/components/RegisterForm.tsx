@@ -27,23 +27,32 @@ export function RegisterForm() {
     setError(undefined);
 
     const fd = new FormData(e.currentTarget);
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        full_name: fd.get("full_name"),
-        email: fd.get("email"),
-        password: fd.get("password"),
-      }),
-    });
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: fd.get("full_name"),
+          email: fd.get("email"),
+          password: fd.get("password"),
+        }),
+      });
 
-    setLoading(false);
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? "Registration failed");
-      return;
+      if (!res.ok) {
+        let msg = "Registration failed";
+        try {
+          const data = await res.json();
+          msg = data.error ?? msg;
+        } catch {}
+        setError(msg);
+        return;
+      }
+      router.push("/login?registered=1");
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
-    router.push("/login?registered=1");
   }
 
   return (

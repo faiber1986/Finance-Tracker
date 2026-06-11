@@ -6,17 +6,25 @@ const API = process.env.API_URL_INTERNAL ?? "http://localhost:8000";
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const res = await fetch(`${API}/api/v1/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ username: body.email, password: body.password }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API}/api/v1/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ username: body.email, password: body.password }),
+    });
+  } catch {
+    console.error("[login] Cannot reach backend at:", API);
+    return NextResponse.json(
+      { error: "Cannot connect to the server. Please try again later." },
+      { status: 503 }
+    );
+  }
 
   if (!res.ok) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
 
-  // Extract the token value from Set-Cookie header and re-set it via Next.js
   const setCookieHeader = res.headers.get("set-cookie");
   if (setCookieHeader) {
     const match = setCookieHeader.match(/access_token=([^;]+)/);

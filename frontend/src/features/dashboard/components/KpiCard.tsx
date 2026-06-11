@@ -39,20 +39,18 @@ export function KpiCard({ title, value, subtitle, icon: Icon, variant = "default
     <Card className="relative overflow-hidden border-border/60 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className={cn("absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r to-transparent", styles.accent)} />
       <CardContent className="p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1 min-w-0 flex-1">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground truncate">
-              {title}
-            </p>
-            <p className={cn("text-2xl font-bold tracking-tight truncate", styles.value)}>{value}</p>
-            {subtitle && (
-              <p className="text-xs text-muted-foreground">{subtitle}</p>
-            )}
+        <div className="flex items-center gap-2 mb-3">
+          <div className={cn("p-1.5 rounded-lg shrink-0", styles.icon)}>
+            <Icon className="h-3.5 w-3.5" />
           </div>
-          <div className={cn("p-2.5 rounded-xl shrink-0 mt-0.5", styles.icon)}>
-            <Icon className="h-4 w-4" />
-          </div>
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground leading-none">
+            {title}
+          </p>
         </div>
+        <p className={cn("text-2xl font-bold tracking-tight leading-none", styles.value)}>{value}</p>
+        {subtitle && (
+          <p className="text-xs text-muted-foreground mt-1.5">{subtitle}</p>
+        )}
       </CardContent>
     </Card>
   );

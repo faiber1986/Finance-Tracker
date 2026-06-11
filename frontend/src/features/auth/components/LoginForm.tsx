@@ -27,23 +27,32 @@ export function LoginForm({ registered }: { registered?: boolean }) {
     setError(undefined);
 
     const fd = new FormData(e.currentTarget);
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: fd.get("email"),
-        password: fd.get("password"),
-      }),
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: fd.get("email"),
+          password: fd.get("password"),
+        }),
+      });
 
-    setLoading(false);
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? "Invalid email or password");
-      return;
+      if (!res.ok) {
+        let msg = "Invalid email or password";
+        try {
+          const data = await res.json();
+          msg = data.error ?? msg;
+        } catch {}
+        setError(msg);
+        return;
+      }
+      router.push("/");
+      router.refresh();
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
-    router.push("/");
-    router.refresh();
   }
 
   return (
