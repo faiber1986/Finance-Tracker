@@ -6,15 +6,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-COPY alembic.ini .
-COPY alembic/ ./alembic/
-COPY src/ ./src/
-COPY start.sh .
-RUN sed -i 's/\r//' start.sh && chmod +x start.sh
+COPY backend/alembic.ini .
+COPY backend/alembic/ ./alembic/
+COPY backend/src/ ./src/
+COPY backend/start.sh .
+RUN chmod +x start.sh && sed -i 's/\r//' start.sh
 
 EXPOSE 8000
 
